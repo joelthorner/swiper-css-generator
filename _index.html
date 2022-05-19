@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.css">
+
+
+	<title>Swiper slide css width calculator</title>
+	<style>
+	.swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+		height: 150px;
+		background-color: #f2f2f2;
+	}
+	@media (min-width: 1500px) {
+		.container {
+			max-width: 1470px;
+		}
+	}
+</style>
+</head>
+<body>
+	<div class="container">
+		<br>
+		<div class="jumbotron">
+			<div class="row">
+				<div class="col">
+					<h1 class="display-4">Swiper slide css width calculator</h1>
+					<p class="lead">Serveix per calcular el css que cal ficar en la media query apropiada, per tal de que abans de inicialitzar el swiper no es carregui trencat!</p>
+					<p class="lead"><code>width: calc( ( 100/nSlides )% - ( spaceBetween - (spaceBetween/nSlides) ) )</code></p>
+					<hr class="my-4">
+					<div class="row">
+						<div class="col">
+							<label for="nSlides">Number of slides</label>
+							<input id="nSlides" type="text" class="form-control" placeholder="4" required="">
+						</div>
+						<div class="col">
+							<label for="spaceBetween">Space between slides</label>
+							<input id="spaceBetween" type="text" class="form-control" placeholder="15" required="">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<label>&nbsp;</label>
+							<button class="btn btn-primary btn-block" id="addCss">Add/remove css</button>
+						</div>
+						<div class="col">
+							<label>&nbsp;</label>
+							<button class="btn btn-success btn-block" id="initSwiper">Init Swiper</button>
+						</div>
+						<div class="col">
+							<label>&nbsp;</label>
+							<button class="btn btn-danger btn-block" id="destroySwiper">Destroy Swiper</button>
+						</div>
+					</div>
+					<br>
+					<code id="result-1"></code><br>
+					<code id="result-2"></code>
+				</div>
+				<div class="col">
+					<img style="margin-left: auto; display:block" src="swiper-css-chart.jpg" alt="">
+					<br>
+					<br>
+				</div>
+			</div>
+
+		</div>
+
+
+		<h2 class="h3">Calculation live: <small>State: </small><span id="state-css" class="badge badge-pill badge-primary">No css</span> <span id="state-swiper" class="badge badge-pill badge-primary">Swiper no init</span></h2>
+		<br>
+
+		<!-- Slider main container -->
+		<div>
+			<div class="swiper-container">
+				<!-- Additional required wrapper -->
+				<div class="swiper-wrapper">
+					<!-- Slides -->
+					<div class="swiper-slide">ProductList 1</div>
+					<div class="swiper-slide">ProductList 2</div>
+					<div class="swiper-slide">ProductList 3</div>
+					<div class="swiper-slide">ProductList 4</div>
+					<div class="swiper-slide">ProductList 5</div>
+					<div class="swiper-slide">ProductList 6</div>
+				</div>
+
+				<!-- If we need navigation buttons -->
+				<div class="swiper-button-prev"></div>
+				<div class="swiper-button-next"></div>
+			</div>
+		</div>
+	</div>
+	
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.js"></script>
+	
+	<script>
+		$(function() {
+			$('#initSwiper').click(function(event) {
+				var nSlides = parseInt($('#nSlides').val());
+				var spaceBetween = parseInt($('#spaceBetween').val());
+
+				if (!isNaN(nSlides) && !isNaN(spaceBetween)) {
+
+					var swiper = new Swiper('.swiper-container', {
+						slidesPerView: nSlides,
+						spaceBetween: spaceBetween,
+						navigation: {
+							nextEl: '.swiper-button-next',
+							prevEl: '.swiper-button-prev',
+						}
+					});
+
+					$('#state-swiper').text('Swiper init');
+				}
+			});
+			$('#destroySwiper').click(function(event) {
+				try {
+					$('.swiper-container')[0].swiper.destroy();
+					$('#state-swiper').text('Swiper no init');
+				} catch (e) {
+
+				}
+			});
+			$('#addCss').click(function(event) {
+				
+				var nSlides = parseInt($('#nSlides').val());
+				var spaceBetween = parseInt($('#spaceBetween').val());
+				var minusVal = (spaceBetween - (spaceBetween/nSlides));
+				
+				if ($('#cssBase').length) {
+					$('#cssBase').remove();
+					$('#state-css').text('Removed css');
+				} else {
+					if (!isNaN(nSlides) && !isNaN(spaceBetween)) {
+
+						$('body').append('<style id="cssBase">.swiper-slide{width: calc(' + (100/nSlides) + '% - ' + minusVal + 'px); margin-right:' + spaceBetween + 'px; }</style>');
+
+						$('#result-1').text('width: calc(' + (100/nSlides) + '% - ' + minusVal + 'px);');
+						$('#result-2').text('margin-right: ' + spaceBetween + 'px;');
+
+						$('#state-css').text('Added css');
+					}
+				}
+			});
+		});
+	</script>
+</body>
+</html>

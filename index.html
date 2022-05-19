@@ -1,172 +1,523 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Calculate the css your Swiper needs to avoid visual breaks before initializing javasscript." />
+    <meta name="author" content="Joel Thorner" />
+    <meta name="generator" content="joelthorner" />
+    <title>Starter Template · Bootstrap v5.2</title>
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.css">
+    <link rel="canonical" href="https://joelthorner.github.io/swiper-css-generator/" />
 
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
 
-	<title>Swiper slide css width calculator</title>
-	<style>
-	.swiper-slide {
-		text-align: center;
-		font-size: 18px;
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: -webkit-flex;
-		display: flex;
-		-webkit-box-pack: center;
-		-ms-flex-pack: center;
-		-webkit-justify-content: center;
-		justify-content: center;
-		-webkit-box-align: center;
-		-ms-flex-align: center;
-		-webkit-align-items: center;
-		align-items: center;
-		height: 150px;
-		background-color: #f2f2f2;
-	}
-	@media (min-width: 1500px) {
-		.container {
-			max-width: 1470px;
-		}
-	}
-</style>
-</head>
-<body>
-	<div class="container">
-		<br>
-		<div class="jumbotron">
-			<div class="row">
-				<div class="col">
-					<h1 class="display-4">Swiper slide css width calculator</h1>
-					<p class="lead">Serveix per calcular el css que cal ficar en la media query apropiada, per tal de que abans de inicialitzar el swiper no es carregui trencat!</p>
-					<p class="lead"><code>width: calc( ( 100/nSlides )% - ( spaceBetween - (spaceBetween/nSlides) ) )</code></p>
-					<hr class="my-4">
-					<div class="row">
-						<div class="col">
-							<label for="nSlides">Number of slides</label>
-							<input id="nSlides" type="text" class="form-control" placeholder="4" required="">
-						</div>
-						<div class="col">
-							<label for="spaceBetween">Space between slides</label>
-							<input id="spaceBetween" type="text" class="form-control" placeholder="15" required="">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							<label>&nbsp;</label>
-							<button class="btn btn-primary btn-block" id="addCss">Add/remove css</button>
-						</div>
-						<div class="col">
-							<label>&nbsp;</label>
-							<button class="btn btn-success btn-block" id="initSwiper">Init Swiper</button>
-						</div>
-						<div class="col">
-							<label>&nbsp;</label>
-							<button class="btn btn-danger btn-block" id="destroySwiper">Destroy Swiper</button>
-						</div>
-					</div>
-					<br>
-					<code id="result-1"></code><br>
-					<code id="result-2"></code>
-				</div>
-				<div class="col">
-					<img style="margin-left: auto; display:block" src="swiper-css-chart.jpg" alt="">
-					<br>
-					<br>
-				</div>
-			</div>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-		</div>
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
 
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: solid rgba(0, 0, 0, 0.15);
+        border-width: 1px 0;
+        box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+      }
 
-		<h2 class="h3">Calculation live: <small>State: </small><span id="state-css" class="badge badge-pill badge-primary">No css</span> <span id="state-swiper" class="badge badge-pill badge-primary">Swiper no init</span></h2>
-		<br>
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
 
-		<!-- Slider main container -->
-		<div>
-			<div class="swiper-container">
-				<!-- Additional required wrapper -->
-				<div class="swiper-wrapper">
-					<!-- Slides -->
-					<div class="swiper-slide">ProductList 1</div>
-					<div class="swiper-slide">ProductList 2</div>
-					<div class="swiper-slide">ProductList 3</div>
-					<div class="swiper-slide">ProductList 4</div>
-					<div class="swiper-slide">ProductList 5</div>
-					<div class="swiper-slide">ProductList 6</div>
-				</div>
+      .bi {
+        vertical-align: -0.125em;
+        fill: currentColor;
+      }
 
-				<!-- If we need navigation buttons -->
-				<div class="swiper-button-prev"></div>
-				<div class="swiper-button-next"></div>
-			</div>
-		</div>
-	</div>
-	
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
 
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.js"></script>
-	
-	<script>
-		$(function() {
-			$('#initSwiper').click(function(event) {
-				var nSlides = parseInt($('#nSlides').val());
-				var spaceBetween = parseInt($('#spaceBetween').val());
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
 
-				if (!isNaN(nSlides) && !isNaN(spaceBetween)) {
+      .icon-list li::before {
+        display: block;
+        flex-shrink: 0;
+        width: 1.5em;
+        height: 1.5em;
+        margin-right: 0.5rem;
+        content: "";
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23212529' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z'/%3E%3C/svg%3E")
+          no-repeat center center / 100% auto;
+      }
+      textarea::-webkit-scrollbar {
+        display: none;
+      }
+      .grid-form {
+        grid-template-columns: 1fr 1fr 200px;
+      }
+      pre:empty {
+        display: none;
+      }
+      pre {
+        font-size: small;
+        border-radius: 5px;
+        padding: 0.75rem 1rem;
+        background-color: var(--bs-gray-100);
+      }
+      h1 .btn {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+      }
+    </style>
+    <style id="cssFromCalc"></style>
+  </head>
+  <body>
+    <div class="container pb-5 mb-5">
+      <div class="px-4 py-5 mt-5 mb-3 text-center">
+        <h1 class="display-5 fw-bold">
+          Swiper css generator 8x
+          <button type="button" class="btn btn-outline-primary rounded-circle" data-bs-toggle="modal" data-bs-target="#whatModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+              <path
+                d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"
+              />
+            </svg>
+          </button>
+        </h1>
+        <div class="col-lg-6 mx-auto">
+          <p class="lead mb-2">Calculate the css your Swiper needs to avoid visual breaks before initializing javascript.</p>
+        </div>
+      </div>
 
-					var swiper = new Swiper('.swiper-container', {
-						slidesPerView: nSlides,
-						spaceBetween: spaceBetween,
-						navigation: {
-							nextEl: '.swiper-button-next',
-							prevEl: '.swiper-button-prev',
-						}
-					});
+      <div class="mb-3" style="max-width: 1200px; margin-left: auto; margin-right: auto">
+        <div class="d-grid g-0 gap-5 grid-form">
+          <div class="d-flex flex-column">
+            <h3 class="h5 mb-3">Calc by swiper js options object</h3>
+            <label for="swiperObject" class="form-label">Paste your swiper js options object <code>{}</code></label>
+            <textarea
+              class="form-control font-monospace"
+              id="swiperObject"
+              rows="4"
+              style="font-size: small; height: 100%"
+              placeholder="{
+  loop: false,
+  slidesPerView: 1,
+  spaceBetween: 12,
+  breakpoints: {
+    480: {
+      slidesPerView: 2,
+    },
+    768: {
+      slidesPerView: 3,
+    },
+    992: {
+      slidesPerView: 4,
+      spaceBetween: 20,
+    },
+  }
+}"
+            ></textarea>
+          </div>
+          <div class="d-flex flex-column">
+            <h3 class="h5 mb-3">Calc by slidesPerView and spaceBetween</h3>
+            <div class="mb-3">
+              <label for="slidesPerView" class="form-label">Slides per view</label>
+              <input type="number" class="form-control" id="slidesPerView" placeholder="4" />
+            </div>
+            <div class="mb-0">
+              <label for="spaceBetween" class="form-label">Space between</label>
+              <input type="text" class="form-control" id="spaceBetween" placeholder="15 or auto" />
+            </div>
+          </div>
+          <div class="d-flex flex-column">
+            <button class="btn btn-primary mb-3 mt-auto" id="addCss"><span class="addCssStatus">Add</span> css</button>
+            <button class="btn btn-primary mb-0" id="initSwiper"><span class="initSwiperStatus">Initialize</span> Swiper</button>
+          </div>
+        </div>
 
-					$('#state-swiper').text('Swiper init');
-				}
-			});
-			$('#destroySwiper').click(function(event) {
-				try {
-					$('.swiper-container')[0].swiper.destroy();
-					$('#state-swiper').text('Swiper no init');
-				} catch (e) {
+        <pre id="resultCss" class="mt-5"></pre>
 
-				}
-			});
-			$('#addCss').click(function(event) {
-				
-				var nSlides = parseInt($('#nSlides').val());
-				var spaceBetween = parseInt($('#spaceBetween').val());
-				var minusVal = (spaceBetween - (spaceBetween/nSlides));
-				
-				if ($('#cssBase').length) {
-					$('#cssBase').remove();
-					$('#state-css').text('Removed css');
-				} else {
-					if (!isNaN(nSlides) && !isNaN(spaceBetween)) {
+        <div class="mt-5" id="exampleSwiper">
+          <!-- Slider main container -->
+          <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+              <!-- Slides -->
+              <div class="swiper-slide">
+                <div class="card">
+                  <img src="./gradienta-LeG68PrXA6Y-unsplash.jpg" class="card-img-top" alt="Photo by Gradienta" />
+                  <div class="card-body">
+                    <h5 class="card-title">Slide 1</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and make up the bulk of the card's content.<br /><span class="rTNyH RZQOk"
+                        >Foto de <a href="https://unsplash.com/@gradienta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Gradienta</a> en
+                        <a href="https://unsplash.com/es/s/fotos/gradient?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+                      </span>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="card">
+                  <img src="./gradienta-LeG68PrXA6Y-unsplash.jpg" class="card-img-top" alt="Photo by Gradienta" />
+                  <div class="card-body">
+                    <h5 class="card-title">Slide 2</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and make up the bulk of the card's content.<br /><span class="rTNyH RZQOk"
+                        >Foto de <a href="https://unsplash.com/@gradienta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Gradienta</a> en
+                        <a href="https://unsplash.com/es/s/fotos/gradient?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+                      </span>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="card">
+                  <img src="./gradienta-LeG68PrXA6Y-unsplash.jpg" class="card-img-top" alt="Photo by Gradienta" />
+                  <div class="card-body">
+                    <h5 class="card-title">Slide 4</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and make up the bulk of the card's content.<br /><span class="rTNyH RZQOk"
+                        >Foto de <a href="https://unsplash.com/@gradienta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Gradienta</a> en
+                        <a href="https://unsplash.com/es/s/fotos/gradient?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+                      </span>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="card">
+                  <img src="./gradienta-LeG68PrXA6Y-unsplash.jpg" class="card-img-top" alt="Photo by Gradienta" />
+                  <div class="card-body">
+                    <h5 class="card-title">Slide 5</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and make up the bulk of the card's content.<br /><span class="rTNyH RZQOk"
+                        >Foto de <a href="https://unsplash.com/@gradienta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Gradienta</a> en
+                        <a href="https://unsplash.com/es/s/fotos/gradient?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+                      </span>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="card">
+                  <img src="./gradienta-LeG68PrXA6Y-unsplash.jpg" class="card-img-top" alt="Photo by Gradienta" />
+                  <div class="card-body">
+                    <h5 class="card-title">Slide 6</h5>
+                    <p class="card-text">
+                      Some quick example text to build on the card title and make up the bulk of the card's content.<br /><span class="rTNyH RZQOk"
+                        >Foto de <a href="https://unsplash.com/@gradienta?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Gradienta</a> en
+                        <a href="https://unsplash.com/es/s/fotos/gradient?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
+                      </span>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-						$('body').append('<style id="cssBase">.swiper-slide{width: calc(' + (100/nSlides) + '% - ' + minusVal + 'px); margin-right:' + spaceBetween + 'px; }</style>');
+    <div class="modal fade" id="whatModal" tabindex="-1" aria-labelledby="whatModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="whatModalLabel">What?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body pt-0">
+            <div class="d-flex justify-content-sm-center">
+              <img src="./swiper-css-chart.jpg" alt="Example of problem" class="img-fluid" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="toast-container p-3 top-0 start-50 translate-middle-x fixed-top" id="toastPlacement">
+      <div id="toastError" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">Hello, world! This is a toast message.</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
 
-						$('#result-1').text('width: calc(' + (100/nSlides) + '% - ' + minusVal + 'px);');
-						$('#result-2').text('margin-right: ' + spaceBetween + 'px;');
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"
+    ></script>
 
-						$('#state-css').text('Added css');
-					}
-				}
-			});
-		});
-	</script>
-</body>
+    <script>
+      const toastError = document.getElementById("toastError"),
+        slidesPerView = document.getElementById("slidesPerView"),
+        spaceBetween = document.getElementById("spaceBetween"),
+        swiperObject = document.getElementById("swiperObject"),
+        addCss = document.getElementById("addCss"),
+        initSwiper = document.getElementById("initSwiper"),
+        cssFromCalc = document.getElementById("cssFromCalc"),
+        resultCss = document.getElementById("resultCss");
+
+      let swiper = null;
+
+      function fireError(message) {
+        const toast = new bootstrap.Toast(toastError, { delay: 2000 });
+        toastError.querySelector(".toast-body").innerHTML = message;
+        toast.show();
+      }
+
+      function getAnyInputGroupValid() {
+        let valid = true;
+        // Errors
+        if ((!slidesPerView.value.length || !spaceBetween.value.length) && !swiperObject.value.length) {
+          valid = false;
+          fireError("Please provide a valid data!");
+        }
+        if (swiperObject.value.length) {
+          const first = swiperObject.value.charAt(0);
+          const last = swiperObject.value.charAt(swiperObject.value.length - 1);
+
+          if (!(first === "{" && last === "}")) {
+            valid = false;
+            fireError("Bad Swiper object format!");
+          }
+        }
+        return valid;
+      }
+
+      function getSwiperData() {
+        if (swiperObject.value.length) {
+          let matchBreakpoints = swiperObject.value.match(/\s*breakpoints\s*:\s*\{(\s*\d{1,4}\s*:\s*\{(\s*\w+\s*:\s*(.*?),?)+\s*\,?\},?)+\s*\}/gm),
+            success = false,
+            dataArray = [];
+
+          const slidesPerViewBase = swiperObject.value.match(/slidesPerView\s*:\s*(\d+|["']auto["'])/),
+            spaceBetweenBase = swiperObject.value.match(/spaceBetween\s*:\s*(\d+)/);
+
+          if (matchBreakpoints && slidesPerViewBase.length === 2 && spaceBetweenBase.length === 2) {
+            dataArray.push({
+              minW: 0,
+              slidesPerView: slidesPerViewBase[1],
+              spaceBetween: spaceBetweenBase[1],
+            });
+
+            let slidesPerViewlast = slidesPerViewBase,
+              spaceBetweenlast = spaceBetweenBase,
+              matchMedias = matchBreakpoints[0].match(/\s*\d{1,4}\s*:\s*\{(\s*\w+\s*:\s*(.*?),?)+\s*\,?\},?/gm);
+
+            if (matchMedias) {
+              for (let i = 0; i < matchMedias.length; i++) {
+                const matchMedia = matchMedias[i].trim(),
+                  mediaMinWidth = matchMedia.match(/^\d{1,4}/),
+                  slidesPerView = matchMedia.match(/slidesPerView\s*:\s*(\d+|["']auto["'])/),
+                  spaceBetween = matchMedia.match(/spaceBetween\s*:\s*(\d+)/);
+
+                  if (slidesPerView && slidesPerView.length === 2) slidesPerViewlast = slidesPerView;
+                  if (spaceBetween && spaceBetween.length === 2) spaceBetweenlast = spaceBetween;
+
+                if (mediaMinWidth && ((slidesPerView && slidesPerView.length === 2) || (spaceBetween && spaceBetween.length === 2))) {
+                  dataArray.push({
+                    minW: parseInt(mediaMinWidth),
+                    slidesPerView: slidesPerView && slidesPerView.length === 2 ? slidesPerView[1] : slidesPerViewlast[1],
+                    spaceBetween: spaceBetween && spaceBetween.length === 2 ? spaceBetween[1] : spaceBetweenlast[1],
+                  });
+                  success = true;
+                }
+              }
+            }
+          }
+
+          if (!success) {
+            fireError("The code could not be parsed");
+          } else {
+            return dataArray;
+          }
+        }
+        if (slidesPerView.value.length && spaceBetween.value.length) {
+          return {
+            slidesPerView: slidesPerView.value,
+            spaceBetween: spaceBetween.value,
+          };
+        }
+      }
+
+      function insertCss(data) {
+        if (Array.isArray(data)) {
+          let cssCode = "";
+
+          for (let i = 0; i < data.length; i++) {
+            const dat = data[i];
+            let width = '';
+
+            dat.slidesPerView = dat.slidesPerView.replace(/["']/g, "");
+
+            if (dat.slidesPerView == "auto") {
+              width = '100%';
+            } else if (dat.slidesPerView == 1) {
+              width = '100%';
+            } else {
+              width = `calc((100% - (${dat.spaceBetween}px * ${dat.slidesPerView - 1})) / ${dat.slidesPerView})`;
+            }
+
+            if (dat.minW == 0) {
+              cssCode += 
+`.swiper-slide {
+  width: ${width};
+  margin-right: ${dat.spaceBetween}px;
+}`;
+            } else {
+              cssCode += 
+`
+@media(min-width: ${dat.minW}px) {
+  .swiper-slide {
+    width: ${width};
+    margin-right: ${dat.spaceBetween}px;
+  }
+}`;
+            }
+          }
+          resultCss.innerHTML = cssFromCalc.innerHTML = cssCode;
+        } else {
+          let width = '';
+
+          data.slidesPerView = data.slidesPerView.replace(/["']/g, "");
+
+          if (data.slidesPerView != "auto") {
+            width = '100%';
+          } else if (data.slidesPerView == 1) {
+            width = '100%';
+          } else {
+            width = `calc((100% - (${dat.spaceBetween}px * ${data.slidesPerView - 1})) / ${data.slidesPerView})`;
+          }
+
+          resultCss.innerHTML = cssFromCalc.innerHTML = 
+`.swiper-slide
+  width: ${width};
+  margin-right: ${data.spaceBetween}px;
+}`;
+        }
+      }
+
+      addCss.addEventListener("click", (event) => {
+        const anyInputGroupValid = getAnyInputGroupValid(),
+          addCssStatus = addCss.querySelector(".addCssStatus");
+
+        if (!anyInputGroupValid || addCssStatus.innerHTML == "Remove") {
+          addCssStatus.innerHTML = "Add";
+          addCss.classList.remove("btn-danger");
+          resultCss.innerHTML = "";
+          cssFromCalc.innerHTML = "";
+          return;
+        }
+
+        const swiperData = getSwiperData();
+        insertCss(swiperData);
+
+        addCssStatus.innerHTML = "Remove";
+        addCss.classList.add("btn-danger");
+      });
+
+      initSwiper.addEventListener("click", (event) => {
+        const anyInputGroupValid = getAnyInputGroupValid(),
+          initSwiperStatus = initSwiper.querySelector(".initSwiperStatus");
+
+        if (!anyInputGroupValid || initSwiperStatus.innerHTML == "Destroy") {
+          initSwiperStatus.innerHTML = "Initialize";
+          initSwiper.classList.remove("btn-danger");
+          try {
+            swiper.destroy(true, true);
+          } catch (error) {}
+          return;
+        }
+
+        const swiperData = getSwiperData();
+
+        if (Array.isArray(swiperData)) {
+          let breakpoints = {};
+          for (let i = 1; i < swiperData.length; i++) {
+            const swiperDat = swiperData[i];
+            breakpoints[swiperDat.minW] = {
+              spaceBetween: swiperDat.spaceBetween,
+              slidesPerView: swiperDat.slidesPerView,
+            };
+          }
+          swiper = new Swiper(".swiper", {
+            spaceBetween: swiperData[0].spaceBetween,
+            slidesPerView: swiperData[0].slidesPerView,
+            breakpoints: breakpoints,
+            navigation: {
+              nextEl: document.querySelector(".swiper-button-next"),
+              prevEl: document.querySelector(".swiper-button-prev"),
+            },
+          });
+        } else { 
+          swiper = new Swiper(".swiper", {
+            spaceBetween: swiperData.spaceBetween,
+            slidesPerView: swiperData.slidesPerView,
+            navigation: {
+              nextEl: document.querySelector(".swiper-button-next"),
+              prevEl: document.querySelector(".swiper-button-prev"),
+            },
+          });
+        }
+          
+        initSwiperStatus.innerHTML = "Destroy";
+        initSwiper.classList.add("btn-danger");
+      });
+
+      /*
+      slidesPerView\s?:\s?\d+
+      spaceBetween\s?:\s?\d+
+
+      ^\s*breakpoints\s*:\s*\{(\s*\d{1,4}\s*:\s*\{(\s*\w+\s*:\s*(\d+|["']\w+["']),?)+\s*\,?\},)+\s*\}
+
+      \s*breakpoints\s*:\s*\{(\s*\d{1,4}\s*:\s*\{(\s*\w+\s*:\s*(.*?),?)+\s*\,?\},?)+\s*\}
+
+      */
+    </script>
+
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+  </body>
 </html>
