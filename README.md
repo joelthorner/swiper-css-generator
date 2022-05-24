@@ -1,4 +1,4 @@
-# swiper-css-generator
-Swiper css before js initialize
+# Swiper css generator (8x)
+Calculate the css your Swiper needs to avoid visual breaks before initializing javascript.
 
-![demo](https://raw.githubusercontent.com/joelthorner/swiper-css-generator/master/swiper-css-chart.jpg)
+![Screenshot](https://raw.githubusercontent.com/joelthorner/swiper-css-generator/master/screenshot.png)
